@@ -7,7 +7,6 @@ def inp():
     open_text = input()
     block_size = int(input())
     matrix_key = []
-
     for i in range(block_size):
         tp = list(map(int, input().split()))
         matrix_key.append(tp)
