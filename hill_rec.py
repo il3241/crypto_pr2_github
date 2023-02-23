@@ -68,7 +68,7 @@ def create_matrix_key(matrix_key_1: np.array, matrix_key_2: np.array, block_size
     for i in range(block_size):
         for j in range(block_size):
             matrix_key[i][j] %= 26
-    print(*matrix_key)
+    #print(*matrix_key)
     return matrix_key
 
 def encrypt(open_text: list, block_size: int, matrix_key_1: np.array, matrix_key_2: np.array) -> str:
@@ -101,11 +101,41 @@ def encrypt(open_text: list, block_size: int, matrix_key_1: np.array, matrix_key
 
         matrix_key_i = create_matrix_key(matrix_key_1, matrix_key_2, block_size)
 
-    print(close_text)
+    print("close text:\n",close_text)
     return close_text
 
-def decrypt(close_text: list, block_size: int, matrix_key: np.array, matrix_key_2: np.array) -> str:
-    pass
+def decrypt(close_text: list, block_size: int, matrix_key_1: np.array, matrix_key_2: np.array) -> str:
+    open_text = ''
+
+    matrix_key_1 = find_rev(matrix_key_1, block_size)
+    matrix_key_2 = find_rev(matrix_key_2, block_size)
+
+    row_close_text = np.array(close_text[0: block_size])
+    for k in range(block_size):
+        row_key = np.array(matrix_key_1[k, :])
+        open_text += chr(97 + round((row_key.dot(row_close_text))) % 26)
+
+    row_close_text = np.array(close_text[block_size: 2 * block_size])
+    for k in range(block_size):
+        row_key = np.array(matrix_key_2[k, :])
+        open_text += chr(97 + round((row_key.dot(row_close_text))) % 26)
+
+    matrix_key_i = create_matrix_key(matrix_key_2, matrix_key_1, block_size)
+
+    for i in range(2 * block_size, len(close_text) - block_size + 1, block_size):
+
+        row_close_text = np.array(close_text[i: i + block_size])
+        for k in range(block_size):
+            row_key = np.array(matrix_key_i[k, :])
+            open_text += chr(97 + round((row_key.dot(row_close_text))) % 26)
+
+        matrix_key_1 = matrix_key_2
+        matrix_key_2 = matrix_key_i
+
+        matrix_key_i = create_matrix_key(matrix_key_2, matrix_key_1, block_size)
+
+    print("open text:\n",open_text)
+    return open_text
 
 
 def find_rev_det(det: int) -> int:
@@ -121,8 +151,8 @@ def find_rev(matrix_key: np.array, block_size: int) -> np.array:
 
     for i in range(block_size):
         for j in range(block_size):
-            inv[i][j] = (((inv[i][j] * (np.linalg.det(matrix_key))) * rev_det) % 26)
-
+            inv[i][j] = round(((inv[i][j] * (np.linalg.det(matrix_key))) * rev_det) % 26)
+    #print(inv)
     return inv
 
 if __name__ == "__main__":
