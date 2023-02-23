@@ -10,7 +10,6 @@ def inp():
     for i in range(block_size):
         tp = list(map(int, input().split()))
         matrix_key.append(tp)
-
     matrix_key = np.array(matrix_key)
     open_text = from_text_to_num(open_text)
     en_de = input()
