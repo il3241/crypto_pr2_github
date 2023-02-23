@@ -1,7 +1,7 @@
 import numpy as np
 import random
 import check_correct_inp
-import math
+
 
 def inp():
     open_text = input()
@@ -44,7 +44,7 @@ def add_rand(open_text: list, block_size: int) -> list:
 
     for i in range(dop):
         random_addition = random.randint(0, 26)
-        print(random_addition, 1111)
+        #print(random_addition)
         open_text.append(random_addition)
 
     return open_text
