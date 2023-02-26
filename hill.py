@@ -68,7 +68,6 @@ def encrypt(open_text: list, block_size: int, matrix_key: np.array) -> str:
     return close_text
 
 def find_rev_det(det: int) -> int:
-
     for x in range(1, 26):
         if (det * x) % 26 == 1:
             rev_det = x
@@ -77,11 +76,13 @@ def find_rev_det(det: int) -> int:
 def find_rev(matrix_key: np.array, block_size: int) -> np.array:
     inv = np.linalg.inv(matrix_key)
     det = np.linalg.det(matrix_key)%26
-    rev_det = find_rev_det(int(det))
+    rev_det = find_rev_det(round(det))
 
     for i in range(block_size):
         for j in range(block_size):
             inv[i][j] = (((inv[i][j] * (np.linalg.det(matrix_key))) * rev_det) % 26)
+            print(np.linalg.det(matrix_key))
+            print(rev_det)
 
     return inv
 
@@ -102,4 +103,10 @@ def decrypt(close_text: list, block_size: int, matrix_key: np.array) -> str:
     return open_text
 
 if __name__ == "__main__":
-    inp()
+    #inp()
+    matrix_key = []
+    for i in range(3):
+        tp = list(map(int, input().split()))
+        matrix_key.append(tp)
+    matrix_key = np.array(matrix_key)
+    print(find_rev(matrix_key, 3))
