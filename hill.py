@@ -81,8 +81,8 @@ def find_rev(matrix_key: np.array, block_size: int) -> np.array:
     for i in range(block_size):
         for j in range(block_size):
             inv[i][j] = (((inv[i][j] * (np.linalg.det(matrix_key))) * rev_det) % 26)
-            print(np.linalg.det(matrix_key))
-            print(rev_det)
+            #print(np.linalg.det(matrix_key))
+            #print(rev_det)
 
     return inv
 
@@ -90,7 +90,7 @@ def decrypt(close_text: list, block_size: int, matrix_key: np.array) -> str:
     open_text = ''
 
     decrypt_key = find_rev(matrix_key, block_size)
-    print("\ndecrypt key:\n", decrypt_key, '\n')
+    #print("\ndecrypt key:\n", decrypt_key, '\n')
     for i in range(0, len(close_text) - block_size + 1, block_size):
 
         row_close_text = np.array(close_text[i: i + block_size])
@@ -103,10 +103,5 @@ def decrypt(close_text: list, block_size: int, matrix_key: np.array) -> str:
     return open_text
 
 if __name__ == "__main__":
-    #inp()
-    matrix_key = []
-    for i in range(3):
-        tp = list(map(int, input().split()))
-        matrix_key.append(tp)
-    matrix_key = np.array(matrix_key)
-    print(find_rev(matrix_key, 3))
+    inp()
+
